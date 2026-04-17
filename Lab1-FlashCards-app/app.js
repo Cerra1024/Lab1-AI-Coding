@@ -230,31 +230,32 @@ function setActiveDeck(deckId) {
 
 /**
  * Move to the next card
- * @returns {boolean} True if moved, false if at end
+ * Loops back to first card when reaching the end
+ * @returns {boolean} True if moved, false if no cards
  */
 function nextCard() {
     const cards = getActiveCards();
     if (cards.length === 0) return false;
     
-    if (appState.ui.activeCardIndex < cards.length - 1) {
-        appState.ui.activeCardIndex++;
-        appState.ui.isCardFlipped = false;
-        return true;
-    }
-    return false;
+    appState.ui.activeCardIndex = (appState.ui.activeCardIndex + 1) % cards.length;
+    appState.ui.isCardFlipped = false;
+    return true;
 }
 
 /**
  * Move to the previous card
- * @returns {boolean} True if moved, false if at start
+ * Loops back to last card when reaching the start
+ * @returns {boolean} True if moved, false if no cards
  */
 function previousCard() {
-    if (appState.ui.activeCardIndex > 0) {
-        appState.ui.activeCardIndex--;
-        appState.ui.isCardFlipped = false;
-        return true;
-    }
-    return false;
+    const cards = getActiveCards();
+    if (cards.length === 0) return false;
+    
+    appState.ui.activeCardIndex = appState.ui.activeCardIndex === 0 
+        ? cards.length - 1 
+        : appState.ui.activeCardIndex - 1;
+    appState.ui.isCardFlipped = false;
+    return true;
 }
 
 /**
@@ -331,6 +332,11 @@ function addCard(front, back) {
     };
     
     cards.push(newCard);
+    
+    // Reset activeCardIndex to show the newly added card
+    appState.ui.activeCardIndex = cards.length - 1;
+    appState.ui.isCardFlipped = false;
+    
     return newCard;
 }
 
@@ -631,6 +637,106 @@ function handleNewDeckClick() {
 }
 
 /**
+ * Handle "New Card" button click
+ * Prompts user for front/back content and adds card to active deck
+ */
+function handleNewCardClick() {
+    if (!appState.activeDeckId) {
+        alert('Please select a deck first.');
+        return;
+    }
+
+    const front = prompt('Enter front of card:');
+    if (!front) {
+        console.log('ℹ New card cancelled');
+        return;
+    }
+
+    const back = prompt('Enter back of card:');
+    if (!back) {
+        console.log('ℹ New card cancelled');
+        return;
+    }
+
+    const newCard = addCard(front, back);
+    if (newCard) {
+        saveState();
+        rerenderUI();
+        console.log(`✓ Added new card to deck: ${newCard.id}`);
+    } else {
+        alert('Error adding card. Please try again.');
+        console.error('Failed to add card');
+    }
+}
+
+/**
+ * Handle flip card button click
+ * Toggles the card flip state and updates UI
+ */
+function handleFlipClick() {
+    const cards = getActiveCards();
+    if (cards.length === 0) {
+        console.log('ℹ No cards to flip');
+        return;
+    }
+
+    toggleCardFlip();
+    updateCardFlipUI();
+    console.log(`✓ Card flipped: ${appState.ui.isCardFlipped ? 'back' : 'front'}`);
+}
+
+/**
+ * Handle next card button click
+ * Moves to next card and updates UI
+ */
+function handleNextClick() {
+    const success = nextCard();
+    if (success) {
+        saveState();
+        rerenderUI();
+        console.log(`✓ Moved to next card: ${appState.ui.activeCardIndex + 1}`);
+    } else {
+        console.log('ℹ No cards to navigate');
+    }
+}
+
+/**
+ * Handle previous card button click
+ * Moves to previous card and updates UI
+ */
+function handlePrevClick() {
+    const success = previousCard();
+    if (success) {
+        saveState();
+        rerenderUI();
+        console.log(`✓ Moved to previous card: ${appState.ui.activeCardIndex + 1}`);
+    } else {
+        console.log('ℹ No cards to navigate');
+    }
+}
+
+/**
+ * Handle shuffle button click
+ * Shuffles the active deck and updates UI
+ */
+function handleShuffleClick() {
+    if (!appState.activeDeckId) {
+        alert('Please select a deck first.');
+        return;
+    }
+
+    const success = shuffleActiveDeck();
+    if (success) {
+        saveState();
+        rerenderUI();
+        console.log('✓ Deck shuffled');
+    } else {
+        alert('Error shuffling deck. Please try again.');
+        console.error('Failed to shuffle deck');
+    }
+}
+
+/**
  * Attach event listener to "New Deck" button
  * Should only be called once during initialization
  */
@@ -649,6 +755,79 @@ function attachNewDeckListener() {
     const freshButton = document.getElementById('new-deck-btn');
     freshButton.addEventListener('click', handleNewDeckClick);
     console.log('✓ New Deck listener attached');
+}
+
+/**
+ * Attach event listener to "New Card" button
+ * Should only be called once during initialization
+ */
+function attachNewCardListener() {
+    const newCardBtn = document.getElementById('new-card-btn');
+    if (!newCardBtn) {
+        console.error('New Card button element not found');
+        return;
+    }
+
+    // Remove any existing listeners by cloning the element
+    const newCardBtnClone = newCardBtn.cloneNode(true);
+    newCardBtn.parentNode.replaceChild(newCardBtnClone, newCardBtn);
+
+    // Add fresh listener
+    const freshButton = document.getElementById('new-card-btn');
+    freshButton.addEventListener('click', handleNewCardClick);
+    console.log('✓ New Card listener attached');
+}
+
+/**
+ * Attach event listeners to study control buttons
+ * Should only be called once during initialization
+ */
+function attachStudyControlListeners() {
+    // Flip button
+    const flipBtn = document.getElementById('flip-btn');
+    if (flipBtn) {
+        const flipBtnClone = flipBtn.cloneNode(true);
+        flipBtn.parentNode.replaceChild(flipBtnClone, flipBtn);
+        const freshFlipBtn = document.getElementById('flip-btn');
+        freshFlipBtn.addEventListener('click', handleFlipClick);
+    } else {
+        console.error('Flip button element not found');
+    }
+
+    // Next button
+    const nextBtn = document.getElementById('next-btn');
+    if (nextBtn) {
+        const nextBtnClone = nextBtn.cloneNode(true);
+        nextBtn.parentNode.replaceChild(nextBtnClone, nextBtn);
+        const freshNextBtn = document.getElementById('next-btn');
+        freshNextBtn.addEventListener('click', handleNextClick);
+    } else {
+        console.error('Next button element not found');
+    }
+
+    // Previous button
+    const prevBtn = document.getElementById('prev-btn');
+    if (prevBtn) {
+        const prevBtnClone = prevBtn.cloneNode(true);
+        prevBtn.parentNode.replaceChild(prevBtnClone, prevBtn);
+        const freshPrevBtn = document.getElementById('prev-btn');
+        freshPrevBtn.addEventListener('click', handlePrevClick);
+    } else {
+        console.error('Previous button element not found');
+    }
+
+    // Shuffle button
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    if (shuffleBtn) {
+        const shuffleBtnClone = shuffleBtn.cloneNode(true);
+        shuffleBtn.parentNode.replaceChild(shuffleBtnClone, shuffleBtn);
+        const freshShuffleBtn = document.getElementById('shuffle-btn');
+        freshShuffleBtn.addEventListener('click', handleShuffleClick);
+    } else {
+        console.error('Shuffle button element not found');
+    }
+
+    console.log('✓ Study control listeners attached');
 }
 
 /**
@@ -697,10 +876,18 @@ function renderFlashcard() {
 
     if (!currentCard) {
         flashcard.innerHTML = '<p style="padding: 2rem; text-align: center; color: #999;">No cards available</p>';
+        flashcard.classList.remove('is-flipped');
         return;
     }
 
-    // Reset flip state when rendering new card (if not already flipped from user action)
+    // Apply flip state class
+    if (appState.ui.isCardFlipped) {
+        flashcard.classList.add('is-flipped');
+    } else {
+        flashcard.classList.remove('is-flipped');
+    }
+
+    // Update card content
     const frontSide = flashcard.querySelector('.card-front');
     const backSide = flashcard.querySelector('.card-back');
 
@@ -713,14 +900,23 @@ function renderFlashcard() {
 }
 
 /**
- * Escape HTML to prevent XSS
- * @param {string} text - Text to escape
- * @returns {string} Escaped text
+ * Update only the card flip UI state
+ * Used for flip button to avoid full re-render
  */
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+function updateCardFlipUI() {
+    const flashcard = document.getElementById('flashcard');
+    if (!flashcard) {
+        console.error('Flashcard element not found');
+        return;
+    }
+
+    if (appState.ui.isCardFlipped) {
+        flashcard.classList.add('is-flipped');
+    } else {
+        flashcard.classList.remove('is-flipped');
+    }
+
+    console.log('✓ Card flip UI updated');
 }
 
 /**
@@ -744,6 +940,8 @@ function rerenderUI() {
  */
 function initializeUIListeners() {
     attachNewDeckListener();
+    attachNewCardListener();
+    attachStudyControlListeners();
     console.log('✓ UI listeners initialized');
 }
 
