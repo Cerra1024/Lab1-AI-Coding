@@ -11,7 +11,7 @@
     <!-- Header with app title and action button -->
     <header class="app-header">
         <div class="header-content">
-            <h1>📚 Flashcards Study App</h1>
+            <h1> Flashcards Study App</h1>
             <button id="new-deck-btn" class="btn btn-primary" aria-label="Create a new deck">
                 + New Deck
             </button>
@@ -62,6 +62,9 @@
                         aria-describedby="search-help"
                         class="search-input"
                     >
+                    <div id="search-help" class="visually-hidden">
+                        Type to filter cards by front or back content. Press Enter to search.
+                    </div>
                 </div>
 
                 <div class="action-buttons">
@@ -77,7 +80,7 @@
             <!-- Flashcard display -->
             <section class="card-display" aria-label="Flashcard">
                 <div class="card-container">
-                    <div class="card" id="flashcard">
+                    <div class="card" id="flashcard" role="button" tabindex="0" aria-label="Flashcard - press space or click to flip">
                         <div class="card-side card-front" aria-hidden="false">
                             <p class="card-label">Front</p>
                             <p class="card-content">gato</p>
@@ -117,5 +120,8 @@
     </footer>
 
     <script src="app.js"></script>
+    
+    <!-- Screen reader live region for dynamic announcements -->
+    <div id="live-region" aria-live="polite" aria-atomic="true" class="visually-hidden"></div>
 </body>
 </html>

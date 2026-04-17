@@ -135,12 +135,14 @@ select:focus {
     align-items: center;
     justify-content: space-between;
     height: var(--header-height);
-    background-color: var(--color-surface);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 2px 4px var(--color-shadow);
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+    border-bottom: 2px solid var(--color-border);
+    box-shadow: 0 4px 8px var(--color-shadow-lg);
     position: sticky;
     top: 0;
     z-index: 100;
+    backdrop-filter: blur(10px);
+    animation: slideInLeft 0.5s ease-out;
 }
 
 .header-content {
@@ -157,7 +159,20 @@ select:focus {
     font-weight: var(--font-weight-bold);
     color: var(--color-text);
     margin: 0;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     flex: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.app-header h1::before {
+    content: '📚';
+    font-size: 1.2em;
+    animation: bounceIn 0.8s ease-out;
 }
 
 /* ============================================================================
@@ -173,11 +188,12 @@ select:focus {
 /* SIDEBAR */
 .sidebar {
     width: var(--sidebar-width);
-    background-color: var(--color-surface);
-    border-right: 1px solid var(--color-border);
+    background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-background) 100%);
+    border-right: 2px solid var(--color-border);
     overflow-y: auto;
     padding: var(--spacing-lg);
-    box-shadow: inset -1px 0 0 var(--color-border);
+    box-shadow: inset -2px 0 4px var(--color-shadow);
+    animation: slideInLeft 0.5s ease-out;
 }
 
 .sidebar nav h2 {
@@ -185,6 +201,16 @@ select:focus {
     font-weight: var(--font-weight-semi-bold);
     margin-bottom: var(--spacing-md);
     color: var(--color-text);
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.sidebar nav h2::before {
+    content: '📂';
+    font-size: 1.1em;
 }
 
 .decks-list {
@@ -235,6 +261,9 @@ select:focus {
     flex-direction: column;
     overflow-y: auto;
     padding: var(--spacing-xl);
+    background: linear-gradient(135deg, var(--color-background) 0%, #f1f3f4 100%);
+    animation: fadeInUp 0.5s ease-out;
+    min-height: 0; /* Allow flex items to shrink */
 }
 
 /* ============================================================================
@@ -243,6 +272,12 @@ select:focus {
 
 .deck-header {
     margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 8px var(--color-shadow);
+    border: 1px solid var(--color-border);
+    animation: slideInRight 0.5s ease-out;
 }
 
 .deck-header h2 {
@@ -250,12 +285,25 @@ select:focus {
     font-weight: var(--font-weight-bold);
     color: var(--color-text);
     margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.deck-header h2::before {
+    content: '🎯';
+    font-size: 1.2em;
 }
 
 .deck-stats {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-muted);
-    font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-medium);
+    background: var(--color-background);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    display: inline-block;
+    border: 1px solid var(--color-border);
 }
 
 /* ============================================================================
@@ -268,6 +316,12 @@ select:focus {
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-lg);
     align-items: center;
+    padding: var(--spacing-lg);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 8px var(--color-shadow);
+    border: 1px solid var(--color-border);
+    animation: slideInRight 0.5s ease-out;
 }
 
 .search-container {
@@ -392,38 +446,276 @@ select:focus {
 }
 
 /* ============================================================================
-   FLASHCARD DISPLAY - 3D FLIP ANIMATION
+   EMPTY STATES
+   ============================================================================ */
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-2xl);
+    min-height: 200px;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.7;
+    animation: bounceIn 0.6s ease-out;
+}
+
+.empty-state-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semi-bold);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-lg);
+    max-width: 300px;
+    line-height: 1.5;
+}
+
+.empty-state-action {
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semi-bold);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.empty-state-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.empty-state-action:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================================================
+   ENHANCED BUTTON STYLES
+   ============================================================================ */
+
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-base);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width var(--transition-fast), height var(--transition-fast);
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Enhanced primary button */
+.btn-primary {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, #003d99 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px var(--color-shadow-lg);
+}
+
+/* Enhanced secondary button */
+.btn-secondary {
+    background: var(--color-surface);
+    border: 2px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: var(--color-surface-hover);
+    border-color: var(--color-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+/* Enhanced navigation buttons */
+.btn-nav {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, #495057 100%);
+    position: relative;
+}
+
+.btn-nav:hover:not(:disabled) {
+    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+    transform: translateY(-1px);
+}
+
+/* Enhanced flip button */
+.btn-flip {
+    background: linear-gradient(135deg, var(--color-success) 0%, #1e7e34 100%);
+    position: relative;
+}
+
+.btn-flip:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* ============================================================================
+   FOCUS MANAGEMENT IMPROVEMENTS
+   ============================================================================ */
+
+.btn:focus-visible,
+.deck-button:focus-visible,
+.search-input:focus-visible,
+#flashcard:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--color-primary-light);
+}
+
+/* Focus trap for modal-like interactions */
+.focus-trap:focus-within {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+}
+
+/* ============================================================================
+   ENHANCED CARD ANIMATIONS
    ============================================================================ */
 
 .card-display {
-    flex: 1;
+    flex: 2;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 8px var(--color-shadow);
+    border: 1px solid var(--color-border);
+    animation: fadeInUp 0.5s ease-out;
+    min-height: 500px;
 }
 
 .card-container {
+    flex: 1;
     width: 100%;
     max-width: 600px;
-    aspect-ratio: 16 / 10;
+    min-height: 300px;
     perspective: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card {
     width: 100%;
     height: 100%;
+    max-width: 500px;
+    max-height: 300px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform var(--transition-slow);
     cursor: pointer;
 }
 
-/* Card flip animation */
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    pointer-events: none;
+    border-radius: var(--radius-lg);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+/* Card flip animation with enhanced effects */
 .card.is-flipped {
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) scale(1.02);
 }
 
 .card-side {
@@ -440,6 +732,7 @@ select:focus {
     background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
     box-shadow: 0 8px 16px var(--color-shadow-lg);
     border: 2px solid var(--color-border);
+    transition: all var(--transition-base);
 }
 
 .card-front {
@@ -448,7 +741,7 @@ select:focus {
 }
 
 .card-back {
-    background: linear-gradient(135deg, #fff9e6 0%, var(--color-surface) 100%);
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
     color: var(--color-warning);
     transform: rotateY(180deg);
 }
@@ -468,6 +761,191 @@ select:focus {
     text-align: center;
     line-height: 1.4;
 }
+
+/* ============================================================================
+   ENHANCED SEARCH AND CONTROLS
+   ============================================================================ */
+
+.search-container {
+    position: relative;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    padding-right: 3rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition: all var(--transition-base);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.search-input::placeholder {
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.search-input:hover {
+    border-color: var(--color-secondary);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light), 0 4px 8px var(--color-shadow);
+    outline: none;
+    transform: translateY(-1px);
+}
+
+/* Search icon */
+.search-container::after {
+    content: '🔍';
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* ============================================================================
+   ENHANCED DECK LIST
+   ============================================================================ */
+
+.deck-item {
+    margin-bottom: var(--spacing-sm);
+    animation: slideInRight 0.3s ease-out;
+    animation-fill-mode: both;
+}
+
+.deck-item:nth-child(1) { animation-delay: 0.1s; }
+.deck-item:nth-child(2) { animation-delay: 0.2s; }
+.deck-item:nth-child(3) { animation-delay: 0.3s; }
+.deck-item:nth-child(4) { animation-delay: 0.4s; }
+.deck-item:nth-child(5) { animation-delay: 0.5s; }
+
+.deck-button {
+    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.deck-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+.deck-button:hover::before {
+    left: 100%;
+}
+
+.deck-button:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-border);
+    transform: translateX(4px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.deck-button:active {
+    background-color: var(--color-border);
+    transform: translateX(2px);
+}
+
+.deck-item.active .deck-button {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-surface);
+    font-weight: var(--font-weight-semi-bold);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+    transform: translateX(8px);
+}
+
+.deck-item.active .deck-button:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, #003d99 100%);
+    transform: translateX(12px);
+    box-shadow: 0 6px 12px rgba(0, 102, 204, 0.4);
+}
+
+/* ============================================================================
+   ENHANCED FOOTER
+   ============================================================================ */
+
+.app-footer {
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-background) 100%);
+    border-top: 2px solid var(--color-border);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    box-shadow: 0 -4px 8px var(--color-shadow);
+    margin-top: auto;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.shortcuts-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.shortcuts-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: var(--color-background);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-base);
+}
+
+.shortcuts-list li:hover {
+    background: var(--color-surface);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+kbd {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-background) 0%, #f8f9fa 100%);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    box-shadow: 0 2px 4px var(--color-shadow);
+    transition: all var(--transition-base);
+}
+
+kbd:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px var(--color-shadow);
+}
+
+/* ============================================================================
+   CARD CONTROLS
+   ============================================================================ */
 
 /* ============================================================================
    CARD CONTROLS
