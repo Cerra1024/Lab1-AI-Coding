@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Flashcards Study App - Create and study custom decks">
+    <title>Flashcards Study App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header with app title and action button -->
+    <header class="app-header">
+        <div class="header-content">
+            <h1>📚 Flashcards Study App</h1>
+            <button id="new-deck-btn" class="btn btn-primary" aria-label="Create a new deck">
+                + New Deck
+            </button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <!-- Sidebar with deck listing -->
+        <aside class="sidebar" aria-label="Decks navigation">
+            <nav>
+                <h2>My Decks</h2>
+                <ul id="decks-list" class="decks-list" role="list">
+                    <li role="listitem" class="deck-item active">
+                        <button class="deck-button" aria-current="page">
+                            Spanish Vocabulary (15 cards)
+                        </button>
+                    </li>
+                    <li role="listitem" class="deck-item">
+                        <button class="deck-button">
+                            Math Formulas (12 cards)
+                        </button>
+                    </li>
+                    <li role="listitem" class="deck-item">
+                        <button class="deck-button">
+                            Biology Terms (20 cards)
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="main-content">
+            <!-- Deck information section -->
+            <section class="deck-header" aria-labelledby="deck-title">
+                <h2 id="deck-title">Spanish Vocabulary</h2>
+                <p class="deck-stats">Card 1 of 15</p>
+            </section>
+
+            <!-- Search and action buttons -->
+            <section class="controls-section" aria-label="Study controls">
+                <div class="search-container">
+                    <label for="search-input" class="visually-hidden">Search cards</label>
+                    <input 
+                        id="search-input" 
+                        type="search" 
+                        placeholder="Search cards..." 
+                        aria-describedby="search-help"
+                        class="search-input"
+                    >
+                </div>
+
+                <div class="action-buttons">
+                    <button id="shuffle-btn" class="btn btn-secondary" aria-label="Shuffle cards">
+                        🔀 Shuffle
+                    </button>
+                    <button id="new-card-btn" class="btn btn-secondary" aria-label="Add a new card to this deck">
+                        ➕ New Card
+                    </button>
+                </div>
+            </section>
+
+            <!-- Flashcard display -->
+            <section class="card-display" aria-label="Flashcard">
+                <div class="card-container">
+                    <div class="card" id="flashcard">
+                        <div class="card-side card-front" aria-hidden="false">
+                            <p class="card-label">Front</p>
+                            <p class="card-content">gato</p>
+                        </div>
+                        <div class="card-side card-back" aria-hidden="true">
+                            <p class="card-label">Back</p>
+                            <p class="card-content">cat</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card navigation and flip controls -->
+                <div class="card-controls" aria-label="Card navigation">
+                    <button id="prev-btn" class="btn btn-nav" aria-label="Previous card">
+                        ← Previous
+                    </button>
+                    <button id="flip-btn" class="btn btn-flip" aria-label="Flip card (spacebar)">
+                        🔄 Flip
+                    </button>
+                    <button id="next-btn" class="btn btn-nav" aria-label="Next card">
+                        Next →
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer with keyboard instructions -->
+    <footer class="app-footer" aria-label="Keyboard shortcuts">
+        <h3>⌨️ Keyboard Shortcuts</h3>
+        <ul class="shortcuts-list">
+            <li><kbd>Space</kbd> or <kbd>F</kbd> - Flip card</li>
+            <li><kbd>→</kbd> or <kbd>N</kbd> - Next card</li>
+            <li><kbd>←</kbd> or <kbd>P</kbd> - Previous card</li>
+            <li><kbd>S</kbd> - Shuffle deck</li>
+        </ul>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

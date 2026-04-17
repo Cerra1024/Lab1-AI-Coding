@@ -1,0 +1,780 @@
+/* ============================================================================
+   CSS VARIABLES - Colors, Spacing, and Typography
+   ============================================================================ */
+
+:root {
+    /* Colors */
+    --color-primary: #0066cc;
+    --color-primary-dark: #0052a3;
+    --color-primary-light: #e6f0ff;
+    --color-secondary: #6c757d;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-warning: #ffc107;
+    --color-info: #17a2b8;
+    
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f0f1f3;
+    --color-text: #212529;
+    --color-text-muted: #6c757d;
+    --color-border: #dee2e6;
+    --color-border-focus: #0066cc;
+    
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-shadow-lg: rgba(0, 0, 0, 0.15);
+    
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* Layout */
+    --sidebar-width: 260px;
+    --header-height: 70px;
+    --footer-height: 120px;
+    
+    /* Typography */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
+    
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+}
+
+/* ============================================================================
+   GLOBAL STYLES
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ============================================================================
+   ACCESSIBILITY - FOCUS STATES
+   ============================================================================ */
+
+:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+}
+
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+}
+
+/* Remove default outline for visible focus ring */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+}
+
+/* Visually hidden text for screen readers */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 2px 4px var(--color-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 var(--spacing-xl);
+    max-width: 100%;
+}
+
+.app-header h1 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin: 0;
+    flex: 1;
+}
+
+/* ============================================================================
+   MAIN LAYOUT - TWO COLUMN
+   ============================================================================ */
+
+.app-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+    box-shadow: inset -1px 0 0 var(--color-border);
+}
+
+.sidebar nav h2 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semi-bold);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.decks-list {
+    list-style: none;
+}
+
+.deck-item {
+    margin-bottom: var(--spacing-sm);
+}
+
+.deck-button {
+    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-normal);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-align: left;
+}
+
+.deck-button:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-border);
+}
+
+.deck-button:active {
+    background-color: var(--color-primary-light);
+}
+
+.deck-item.active .deck-button {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    font-weight: var(--font-weight-semi-bold);
+}
+
+.deck-item.active .deck-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+}
+
+/* ============================================================================
+   DECK HEADER SECTION
+   ============================================================================ */
+
+.deck-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.deck-header h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+}
+
+.deck-stats {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-normal);
+}
+
+/* ============================================================================
+   CONTROLS SECTION
+   ============================================================================ */
+
+.controls-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    align-items: center;
+}
+
+.search-container {
+    flex: 1;
+    min-width: 200px;
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.search-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.search-input:hover {
+    border-color: var(--color-border);
+}
+
+.search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+    outline: none;
+}
+
+.action-buttons {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semi-bold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-secondary);
+}
+
+.btn-secondary:active:not(:disabled) {
+    background-color: var(--color-border);
+}
+
+/* Navigation Button */
+.btn-nav {
+    background-color: var(--color-secondary);
+    color: var(--color-surface);
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.btn-nav:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+
+/* Flip Button */
+.btn-flip {
+    background-color: var(--color-success);
+    color: var(--color-surface);
+    padding: var(--spacing-md) var(--spacing-lg);
+    min-width: 120px;
+}
+
+.btn-flip:hover:not(:disabled) {
+    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.btn-flip:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* ============================================================================
+   FLASHCARD DISPLAY - 3D FLIP ANIMATION
+   ============================================================================ */
+
+.card-display {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.card-container {
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 16 / 10;
+    perspective: 1000px;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform var(--transition-slow);
+    cursor: pointer;
+}
+
+/* Card flip animation */
+.card.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.card-side {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+    box-shadow: 0 8px 16px var(--color-shadow-lg);
+    border: 2px solid var(--color-border);
+}
+
+.card-front {
+    background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+    color: var(--color-primary);
+}
+
+.card-back {
+    background: linear-gradient(135deg, #fff9e6 0%, var(--color-surface) 100%);
+    color: var(--color-warning);
+    transform: rotateY(180deg);
+}
+
+.card-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semi-bold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.7;
+}
+
+.card-content {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* ============================================================================
+   CARD CONTROLS
+   ============================================================================ */
+
+.card-controls {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card-controls .btn {
+    min-width: 120px;
+}
+
+/* ============================================================================
+   FOOTER
+   ============================================================================ */
+
+.app-footer {
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    box-shadow: 0 -2px 4px var(--color-shadow);
+    margin-top: auto;
+}
+
+.app-footer h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semi-bold);
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.shortcuts-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.shortcuts-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+kbd {
+    display: inline-block;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: monospace;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semi-bold);
+    color: var(--color-text);
+    box-shadow: 0 2px 0 var(--color-shadow);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - TABLET
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 220px;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.5rem;
+    }
+
+    .main-content {
+        padding: var(--spacing-lg);
+    }
+
+    .card-side {
+        padding: var(--spacing-lg);
+    }
+
+    .app-header {
+        border-bottom: 1px solid var(--color-border);
+    }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - MOBILE/STACKED LAYOUT
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 100%;
+        --header-height: auto;
+        --spacing-md: 0.75rem;
+        --spacing-lg: 1rem;
+        --spacing-xl: 1.25rem;
+        --font-size-2xl: 1.25rem;
+    }
+
+    /* Stack layout: header -> sidebar -> main -> footer */
+    body {
+        flex-direction: column;
+    }
+
+    .app-container {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    /* Header adjustments */
+    .app-header {
+        height: auto;
+        flex-wrap: wrap;
+        padding: var(--spacing-md);
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+        align-items: stretch;
+    }
+
+    .app-header h1 {
+        font-size: var(--font-size-xl);
+        text-align: center;
+    }
+
+    #new-deck-btn {
+        width: 100%;
+    }
+
+    /* Sidebar becomes horizontal on mobile */
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--spacing-md);
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .sidebar nav h2 {
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .decks-list {
+        display: flex;
+        gap: var(--spacing-sm);
+        overflow-x: auto;
+        padding-bottom: var(--spacing-sm);
+    }
+
+    .deck-item {
+        flex-shrink: 0;
+        min-width: 150px;
+    }
+
+    /* Main content on mobile */
+    .main-content {
+        padding: var(--spacing-md);
+        flex: 1;
+    }
+
+    .deck-header h2 {
+        font-size: var(--font-size-lg);
+    }
+
+    /* Controls stack on mobile */
+    .controls-section {
+        flex-direction: column;
+    }
+
+    .search-container {
+        min-width: auto;
+    }
+
+    .action-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+    }
+
+    /* Card display adjustments */
+    .card-container {
+        max-width: 100%;
+        aspect-ratio: 4 / 3;
+    }
+
+    .card-side {
+        padding: var(--spacing-lg);
+    }
+
+    .card-label {
+        font-size: 0.75rem;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .card-content {
+        font-size: var(--font-size-lg);
+    }
+
+    /* Controls stack on mobile */
+    .card-controls {
+        gap: var(--spacing-sm);
+    }
+
+    .card-controls .btn {
+        min-width: 90px;
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: var(--font-size-sm);
+    }
+
+    /* Footer adjustments */
+    .app-footer {
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .app-footer h3 {
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .shortcuts-list {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - SMALL MOBILE
+   ============================================================================ */
+
+@media (max-width: 480px) {
+    :root {
+        --spacing-md: 0.5rem;
+        --spacing-lg: 0.75rem;
+        --spacing-xl: 1rem;
+        --font-size-lg: 1rem;
+        --font-size-2xl: 1.125rem;
+    }
+
+    .app-header h1 {
+        font-size: var(--font-size-lg);
+    }
+
+    .deck-header h2 {
+        font-size: var(--font-size-lg);
+    }
+
+    .sidebar {
+        max-height: 150px;
+    }
+
+    .card-container {
+        aspect-ratio: 1 / 1;
+    }
+
+    .card-content {
+        font-size: var(--font-size-base);
+    }
+
+    kbd {
+        padding: 2px 4px;
+        font-size: 0.75rem;
+    }
+}
+
+/* ============================================================================
+   HIGH CONTRAST MODE SUPPORT
+   ============================================================================ */
+
+@media (prefers-contrast: more) {
+    :root {
+        --color-border: #000;
+        --color-shadow: rgba(0, 0, 0, 0.2);
+    }
+
+    .btn {
+        border: 2px solid currentColor;
+    }
+
+    .card-side {
+        border-width: 3px;
+    }
+}
+
+/* ============================================================================
+   REDUCED MOTION SUPPORT
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .card {
+        transition: none;
+    }
+}
